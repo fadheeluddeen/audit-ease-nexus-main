@@ -3,15 +3,22 @@ import { HeroSection } from "@/components/HeroSection";
 import { WhoWeAreSection } from "@/components/WhoWeAreSection";
 import { ISOComplianceSection } from "@/components/ISOComplianceSection";
 import { Footer } from "@/components/Footer";
+import { FolderItem } from "@/utils/folderUtils";
 
-const Index = ({ setSelectedFiles }: { setSelectedFiles: (files: FileList | null) => void }) => {
+interface IndexProps {
+  setSelectedFiles: (files: FileList | null) => void;
+  setFolderTree: (tree: FolderItem | null) => void;
+  folderTree: FolderItem | null;
+}
+
+const Index = ({ setSelectedFiles, setFolderTree, folderTree }: IndexProps) => {
   return (
     <main>
       <Header />
-      <HeroSection setSelectedFiles={setSelectedFiles} />
+      <HeroSection setSelectedFiles={setSelectedFiles} setFolderTree={setFolderTree} />
       <WhoWeAreSection />
       <ISOComplianceSection />
-      <Footer />
+      <Footer folderTree={folderTree} />
     </main>
   );
 };

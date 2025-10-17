@@ -131,7 +131,12 @@ import { runValidation } from "@/logic/validationDispatcher";
 import { processFolder, FolderItem } from "@/utils/folderUtils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export const HeroSection = ({ setSelectedFiles }: { setSelectedFiles: (files: FileList | null) => void }) => {
+interface HeroSectionProps {
+  setSelectedFiles: (files: FileList | null) => void;
+  setFolderTree: (tree: FolderItem | null) => void;
+}
+
+export const HeroSection = ({ setSelectedFiles, setFolderTree }: HeroSectionProps) => {
   const [folderPath, setFolderPath] = useState("");
   const [selectedFiles, setLocalSelectedFiles] = useState<FileList | null>(null);
   const [validationResults, setValidationResults] = useState<{ folderName: string; fileName: string; errorSpotted: string }[]>([]);
@@ -142,13 +147,17 @@ export const HeroSection = ({ setSelectedFiles }: { setSelectedFiles: (files: Fi
     fileInputRef.current?.click();
   };
 
-  const handleFolderSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFolderSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const path = files[0].webkitRelativePath.split('/')[0] || files[0].name;
       setFolderPath(path);
       setLocalSelectedFiles(files);
-      setSelectedFiles(files); // Pass to parent (App.tsx)
+      setSelectedFiles(files);
+      
+      // Build and store folder tree
+      const tree = await processFolder();
+      setFolderTree(tree);
     }
   };
 

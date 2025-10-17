@@ -1,3 +1,5 @@
+
+
 export async function validateFolder3(files: File[]): Promise<{ folderName: string; fileName: string; errorSpotted: string }[]> {
   const results = [];
   for (const file of files) {
